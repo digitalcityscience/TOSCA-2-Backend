@@ -1,0 +1,42 @@
+version: "3.9"
+
+volumes:
+  tosca-geoserver-data-dir:
+  geo-db-data:
+
+services:
+  db:
+    image: kartoza/postgis:${POSTGIS_VERSION_TAG}
+    volumes:
+      - geo-db-data:/var/lib/postgresql
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - ALLOW_IP_RANGE=${ALLOW_IP_RANGE}
+      - FORCE_SSL=TRUE
+    restart: on-failure
+    healthcheck:
+      test: "PGPASSWORD=${POSTGRES_PASS} pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+
+  geoserver:
+    image: kartoza/geoserver:${GS_VERSION}
+    volumes:
+      - tosca-geoserver-data-dir:/opt/geoserver/data_dir
+      - /home/ortak/Desktop/sandbox/tosca-geoserver-postgis-test/docker-geoserver/geo-data:/mnt/data
+      - /home/ortak/Desktop/HCU/LIG/data:/mnt/LIG
+    ports:
+      - ${GEOSERVER_PORT}:8080
+    restart: on-failure
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null -u ${GEOSERVER_ADMIN_USER}:'${GEOSERVER_ADMIN_PASSWORD}' http://localhost:8080/geoserver/rest/about/version.xml"
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
