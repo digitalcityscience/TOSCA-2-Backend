@@ -1,14 +1,15 @@
 version: "3.9"
 
 volumes:
-  tosca-geoserver-data-dir:
-  geo-db-data:
+  tosca-geoserver-data-dir-dev:
+  geo-db-data-dev:
 
 services:
   db:
     image: kartoza/postgis:${POSTGIS_VERSION_TAG}
+    container_name: tosca-2-db-dev
     volumes:
-      - geo-db-data:/var/lib/postgresql
+      - geo-db-data-dev:/var/lib/postgresql
     ports:
       - ${POSTGRES_PORT}:5432
     environment:
@@ -23,10 +24,12 @@ services:
 
   geoserver:
     image: kartoza/geoserver:${GS_VERSION}
+    container_name: tosca-2-geoserver-dev
     volumes:
-      - tosca-geoserver-data-dir:/opt/geoserver/data_dir
+      - tosca-geoserver-data-dir-dev:/opt/geoserver/data_dir
       - /home/ortak/Desktop/sandbox/tosca-geoserver-postgis-test/docker-geoserver/geo-data:/mnt/data
       - /home/ortak/Desktop/HCU/LIG/data:/mnt/LIG
+      - ./build_data/:/settings
     ports:
       - ${GEOSERVER_PORT}:8080
     restart: on-failure

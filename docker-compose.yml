@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 volumes:
   tosca-db-data:
@@ -25,6 +25,7 @@ services:
     image: kartoza/geoserver:${GS_VERSION}
     volumes:
       - tosca-geoserver-data-dir:/opt/geoserver/data_dir
+      - ./build_data/:/settings
       # sample volume attachment. Please give full path.
       #- /home/tosca/sample_data:/mnt/data
     ports:
@@ -33,5 +34,9 @@ services:
     env_file:
       - .env
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+    healthcheck:
+      test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null -u ${GEOSERVER_ADMIN_USER}:'${GEOSERVER_ADMIN_PASSWORD}' http://localhost:8080/geoserver/rest/about/version.xml"
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
