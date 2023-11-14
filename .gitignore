@@ -1,3 +1,6 @@
+#Files
+installation_files/
+geoserver/installation_files/
 # Environments
 **/.env
 .env
@@ -15,8 +18,8 @@ venv.bak/
 *.out
 *.xlsx
 
-.build_data/*.txt
-.build_data/*.lock
+build_data/*.txt
+build_data/*.lock
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
