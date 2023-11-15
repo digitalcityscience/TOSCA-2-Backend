@@ -27,7 +27,7 @@ services:
     image: tosca-geoserver-image
     container_name: tosca-2-geoserver-prod
     volumes:
-      - tosca-geoserver-data-dir:/opt/geoserver/data_dir
+      - tosca-geoserver-data-dir:/usr/share/geoserver/data_dir
       - ./build_data/:/settings
       # sample volume attachment. Please give full path.
       #- /home/tosca/sample_data:/mnt/data
