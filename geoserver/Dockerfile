@@ -20,9 +20,11 @@ WORKDIR /usr/share/geoserver
 RUN unzip -q /usr/share/installation_files/geoserver.zip && \
     rm /usr/share/installation_files/geoserver.zip
 
-WORKDIR /usr/share/geoserver/webapps/geoserver/WEB-INF/lib
-RUN unzip -q /usr/share/installation_files/vectortiles.zip && \
-    rm  /usr/share/installation_files/vectortiles.zip
+# Unzip all files in /usr/share/installation_files
+RUN for file in /usr/share/installation_files/extentions/*.zip; do \
+    unzip -qo  "$file" -d /usr/share/geoserver/webapps/geoserver/WEB-INF/lib ; \
+    done
+
 
 # Enable CORS
 # Be careful about this settings. If you change the version, it might be different

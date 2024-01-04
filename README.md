@@ -40,3 +40,11 @@ We would like to express our gratitude to Kartoza for their valuable contributio
 - [Kartoza's Docker GeoServer](https://github.com/kartoza/docker-geoserver)
 
 Feel free to adjust the names and links as needed to thank other open source communities that have contributed to your project.
+
+## DEVELOPMENT Notes
+
+We are using the following tools to export SLD to Mapbox GL Style:
+
+geostyler -s se test.sld -t mapbox -o test.mapbox
+
+For this process we should prepare docker image for geostyler and use it in the pipeline.
