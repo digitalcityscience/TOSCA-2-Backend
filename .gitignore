@@ -151,6 +151,10 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-
+tosca-geonode
+data
+geonode/tosca-geonode/
+geonode/data/
+geo-data
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Python
 
